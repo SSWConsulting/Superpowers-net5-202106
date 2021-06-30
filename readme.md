@@ -1,0 +1,1 @@
+Examples from the 1 day superpower event
