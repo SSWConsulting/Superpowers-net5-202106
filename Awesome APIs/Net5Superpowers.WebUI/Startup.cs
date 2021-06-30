@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.FeatureManagement;
+using Microsoft.FeatureManagement.FeatureFilters;
 using Net5Superpowers.WebUI.Data;
 using System.Reflection;
 
@@ -45,6 +47,10 @@ namespace Net5Superpowers.WebUI
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddAzureAppConfiguration();
+            services.AddFeatureManagement()
+                .AddFeatureFilter<PercentageFilter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +70,7 @@ namespace Net5Superpowers.WebUI
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAzureAppConfiguration();
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
