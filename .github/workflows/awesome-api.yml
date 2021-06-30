@@ -7,6 +7,7 @@ on:
     branches: [ main ]
     
 env:
+  AZURE_WEBAPP_PACKAGE_PATH: 'Awesome APIs/Net5Superpowers.WebUI/'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '5.0.x'           # set this to the dot net version to use
   NODE_VERSION: '14.x'           # set this to the node version to use
 
@@ -22,12 +23,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-        
-    - name: Restore dependencies
-      run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore
-
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: |
+        cd ${{ AZURE_WEBAPP_PACKAGE_PATH }}
+        dotnet restore
+        dotnet build --no-restore
+        dotnet test --no-build --verbosity normal
