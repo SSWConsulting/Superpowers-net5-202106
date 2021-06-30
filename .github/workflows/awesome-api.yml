@@ -7,6 +7,7 @@ on:
     branches: [ main ]
     
 env:
+  AZURE_WEBAPP_NAME: dotnet5-todos    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: 'Awesome APIs/Net5Superpowers.WebUI/'      # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '5.0.x'           # set this to the dot net version to use
   NODE_VERSION: '14.x'           # set this to the node version to use
@@ -31,3 +32,18 @@ jobs:
         dotnet build --configuration Release
         dotnet test --no-build --verbosity normal
         dotnet publish -c Release -o './myapp' 
+
+    - uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    # Deploy to Azure Web apps
+    - name: 'Run Azure webapp deploy action using publish profile credentials'
+      uses: azure/webapps-deploy@v2
+      with: 
+        app-name: ${{ env.AZURE_WEBAPP_NAME }} # Replace with your app name
+        package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
+    
+    - name: logout
+      run: |
+        az logout
