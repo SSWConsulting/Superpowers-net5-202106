@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Forecasts": {
+      "commandName": "Project",
+      "commandLineArgs": "4",
+      "sqlDebugging": false
+    }
+  }
+}
